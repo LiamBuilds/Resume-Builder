@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haggerty Individual Portfolio — Add Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CONFIG NOTE: to change dropdown lists or the save location,
+   scroll to the <script> CONFIG block near the bottom.
+   ============================================================ */
+:root{
+  --ink:#1B2126; --steel:#2E3640; --muted:#69727C;
+  --bg:#EDEFF1; --card:#FFFFFF; --line:#D6DBDF; --line-2:#C2C8CD;
+  --hi:#EC5A13; --hi-dark:#B9430A; --hi-soft:#FDEBE0;
+  --ok:#1F7A34; --ok-soft:#E4F2E6; --err:#B4231C; --err-soft:#FBE7E6;
+  --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Barlow',system-ui,sans-serif;background:var(--bg);color:var(--ink);
+  line-height:1.45;min-height:100vh;padding-bottom:3rem;
+}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+.disp{font-family:'Barlow Semi Condensed',sans-serif;letter-spacing:.01em;line-height:1.05}
+
+/* ---- top bar ---- */
+.bar{background:var(--ink);color:#fff;padding:14px 0}
+.bar .wrap{display:flex;align-items:center;gap:12px}
+.mark{height:34px;width:auto;flex:0 0 auto;display:flex;align-items:center}
+.mark img{height:34px;width:auto;display:block}
+.bar h1{font-family:'Barlow Semi Condensed';font-weight:700;font-size:18px;
+  text-transform:uppercase;letter-spacing:.04em}
+.bar small{display:block;font-family:'Barlow';font-weight:500;font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;color:#9AA3AC;margin-top:1px}
+
+/* ---- screens ---- */
+.screen{padding-top:20px}
+.hidden{display:none!important}
+
+/* ---- identity setup ---- */
+.lead{font-family:'Barlow Semi Condensed';font-weight:700;font-size:26px;
+  text-transform:uppercase;margin-bottom:4px}
+.sub{color:var(--muted);font-size:15px;margin-bottom:22px}
+
+label{display:block;font-weight:600;font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--steel);margin:0 0 6px 2px}
+.opt{color:var(--muted);font-weight:500;letter-spacing:.02em}
+.field{margin-bottom:16px}
+select,input,textarea{
+  width:100%;font-family:'Barlow',sans-serif;font-size:17px;color:var(--ink);
+  background:var(--card);border:1.5px solid var(--line-2);border-radius:var(--r);
+  padding:13px 14px;min-height:52px;appearance:none;-webkit-appearance:none;
+}
+textarea{min-height:88px;resize:vertical;line-height:1.4}
+select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='%232E3640' stroke-width='2.4' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:44px}
+select:focus,input:focus,textarea:focus{outline:3px solid var(--hi-soft);
+  border-color:var(--hi);outline-offset:0}
+.field.bad select,.field.bad input,.field.bad textarea{border-color:var(--err);background:var(--err-soft)}
+.err-msg{display:none;color:var(--err);font-size:13px;font-weight:600;margin:5px 0 0 2px}
+.field.bad .err-msg{display:block}
+
+/* ---- buttons ---- */
+.btn{width:100%;font-family:'Barlow Semi Condensed',sans-serif;font-weight:700;
+  font-size:19px;text-transform:uppercase;letter-spacing:.03em;border:none;
+  border-radius:var(--r);padding:16px;cursor:pointer;min-height:56px;transition:transform .04s,background .15s}
+.btn:active{transform:scale(.986)}
+.btn-hi{background:var(--hi);color:#fff}
+.btn-hi:hover{background:var(--hi-dark)}
+.btn-hi:disabled{background:#E6A583;cursor:default}
+.btn-ghost{background:transparent;color:var(--steel);border:1.5px solid var(--line-2);
+  font-size:14px;min-height:46px;padding:11px}
+.btn-ghost:hover{background:#E4E7EA}
+
+/* ---- sticky identity strip ---- */
+.who{position:sticky;top:0;z-index:20;background:var(--steel);color:#fff;
+  border-radius:0 0 var(--r) var(--r);padding:11px 14px;display:flex;align-items:center;
+  gap:11px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.14)}
+.who .id{width:38px;height:38px;border-radius:50%;background:var(--hi);flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;font-family:'Barlow Semi Condensed';
+  font-weight:700;font-size:15px}
+.who .nm{flex:1;min-width:0}
+.who .nm b{font-family:'Barlow Semi Condensed';font-weight:600;font-size:16px;
+  display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who .nm span{font-size:12px;color:#B7BEC6;letter-spacing:.04em}
+.who button{background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:7px;
+  font-family:'Barlow';font-weight:600;font-size:12px;letter-spacing:.05em;text-transform:uppercase;
+  padding:8px 11px;cursor:pointer;flex:0 0 auto}
+.who button:hover{background:rgba(255,255,255,.22)}
+
+/* ---- company bar + switch ---- */
+.coBar{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);
+  padding:9px 13px;margin:0 0 16px}
+.coBar span{font-size:13.5px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.coBar b{color:var(--ink);font-weight:600}
+.coBar button{background:var(--hi-soft);color:var(--hi-dark);border:none;border-radius:7px;
+  font-family:'Barlow';font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase;
+  padding:9px 13px;cursor:pointer;flex:0 0 auto}
+.coBar button:hover{background:#FBDDCB}
+.coPanel{background:var(--card);border:1.5px solid var(--line-2);border-radius:var(--r);
+  padding:14px;margin:-6px 0 16px}
+.coPanel .btn{margin-top:10px}
+
+/* ---- tally ---- */
+.tally{display:flex;align-items:baseline;gap:10px;margin:0 2px 16px}
+.tally b{font-family:'Barlow Semi Condensed';font-weight:700;font-size:44px;color:var(--hi);line-height:1}
+.tally span{font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);
+  padding:18px 16px 20px;margin-bottom:18px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card h2{font-family:'Barlow Semi Condensed';font-weight:700;font-size:15px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--steel);margin-bottom:16px;
+  padding-bottom:11px;border-bottom:1.5px solid var(--line)}
+
+/* ---- banner / toast ---- */
+.banner{border-radius:var(--r);padding:11px 14px;font-size:14px;font-weight:600;margin-bottom:16px}
+.banner.warn{background:#FEF6E7;color:#8A5A00;border:1.5px solid #F3D48A}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(140%);
+  background:var(--ink);color:#fff;padding:13px 20px;border-radius:var(--r);font-weight:600;
+  font-size:15px;box-shadow:0 8px 24px rgba(0,0,0,.28);z-index:60;transition:transform .28s cubic-bezier(.2,.8,.2,1);
+  display:flex;align-items:center;gap:9px;max-width:90vw}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast .dot{width:9px;height:9px;border-radius:50%;background:var(--hi);flex:0 0 auto}
+.toast.good .dot{background:#57D06E}
+
+/* ---- session log ---- */
+.log h2{font-family:'Barlow Semi Condensed';font-weight:700;font-size:15px;text-transform:uppercase;
+  letter-spacing:.05em;color:var(--steel);margin:6px 2px 10px}
+.item{background:var(--card);border:1.5px solid var(--line);border-left:4px solid var(--ok);
+  border-radius:8px;padding:11px 13px;margin-bottom:9px;display:flex;align-items:center;gap:11px}
+.item.pending{border-left-color:var(--muted)}
+.item.failed{border-left-color:var(--err);background:var(--err-soft)}
+.item .txt{flex:1;min-width:0}
+.item .txt b{font-weight:600;font-size:15px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .txt span{font-size:12.5px;color:var(--muted)}
+.item .st{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;flex:0 0 auto}
+.item .st.ok{color:var(--ok)}
+.item .st.pend{color:var(--muted)}
+.item .st.fail{color:var(--err)}
+.item .retry{background:var(--err);color:#fff;border:none;border-radius:7px;padding:8px 12px;
+  font-family:'Barlow';font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer}
+.empty{color:var(--muted);font-size:14px;text-align:center;padding:14px;border:1.5px dashed var(--line-2);border-radius:8px}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:26px;line-height:1.6}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="wrap">
+  <div class="mark"><img src="data:image/png;base64,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" alt="Haggerty"></div>
+  <div><h1>Individual Portfolio</h1><small>Project Entry</small></div>
+</div></div>
+
+<!-- ============ SCREEN 1: WHO ARE YOU ============ -->
+<div class="wrap screen" id="screenId">
+  <div class="lead disp">Who's entering?</div>
+  <div class="sub">Set this once. It stays put while you add every project.</div>
+  <div class="field" id="f_name">
+    <label>Your name</label>
+    <select id="idName"><option value="">Select your name</option></select>
+    <div class="err-msg">Pick your name to continue.</div>
+  </div>
+  <div class="field" id="f_role">
+    <label>Role</label>
+    <select id="idRole"><option value="">Select role</option></select>
+    <div class="err-msg">Pick a role.</div>
+  </div>
+  <div class="field" id="f_company">
+    <label>Company of employment</label>
+    <select id="idCompany"><option value="">Select company</option></select>
+    <input id="idCompanyOther" class="hidden" type="text" placeholder="Type company name" autocomplete="off" style="margin-top:10px">
+    <div class="err-msg">Pick or type a company.</div>
+  </div>
+  <button class="btn btn-hi" id="startBtn">Start adding projects</button>
+</div>
+
+<!-- ============ SCREEN 2: ADD PROJECTS ============ -->
+<div class="wrap screen hidden" id="screenAdd">
+  <div class="who">
+    <div class="id" id="whoInit">–</div>
+    <div class="nm"><b id="whoName">–</b><span id="whoMeta">–</span></div>
+    <button id="changeBtn">Change</button>
+  </div>
+
+  <div class="coBar">
+    <span>Logging under: <b id="coNow">–</b></span>
+    <button id="coSwitch">Switch</button>
+  </div>
+  <div id="coPanel" class="coPanel hidden">
+    <label>Company for the projects you're adding now</label>
+    <select id="coSelect"><option value="">Select company</option></select>
+    <input id="coOther" class="hidden" type="text" placeholder="Type company name" autocomplete="off" style="margin-top:10px">
+    <button class="btn btn-hi" id="coUse">Use this company</button>
+  </div>
+
+  <div id="connBanner" class="banner warn hidden">Test mode — projects are logged here but not saved yet. Add your n8n webhook in the config to go live.</div>
+
+  <div class="tally"><b id="count">0</b><span>projects added this session</span></div>
+
+  <div class="card">
+    <h2>New project</h2>
+    <div class="field" id="p_name">
+      <label>Project name</label>
+      <input id="pName" type="text" placeholder="e.g. Stockton Industrial Warehouse" autocomplete="off">
+      <div class="err-msg">Enter the project name.</div>
+    </div>
+    <div class="row2">
+      <div class="field" id="p_cost">
+        <label>Cost ($)</label>
+        <input id="pCost" type="text" inputmode="numeric" placeholder="12,500,000">
+        <div class="err-msg">Enter a number.</div>
+      </div>
+      <div class="field" id="p_sf">
+        <label>Square footage</label>
+        <input id="pSf" type="text" inputmode="numeric" placeholder="220,000">
+        <div class="err-msg">Enter a number.</div>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field" id="p_vert">
+        <label>Vertical</label>
+        <select id="pVert"><option value="">Select</option></select>
+        <div class="err-msg">Pick one.</div>
+      </div>
+      <div class="field" id="p_type">
+        <label>Type</label>
+        <select id="pType"><option value="">Select</option></select>
+        <div class="err-msg">Pick one.</div>
+      </div>
+    </div>
+    <div class="field" id="p_scope">
+      <label>Scope</label>
+      <textarea id="pScope" placeholder="What you ran on this job — e.g. Full GC oversight, ground-up tilt-up, sitework through TI"></textarea>
+      <div class="err-msg">Enter the scope.</div>
+    </div>
+    <div class="field">
+      <label>Architect <span class="opt">— optional</span></label>
+      <input id="pArch" type="text" placeholder="e.g. Ware Malcomb" autocomplete="off">
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Year <span class="opt">— optional</span></label>
+        <input id="pYear" type="text" inputmode="numeric" placeholder="2023">
+      </div>
+      <div class="field">
+        <label>City / State <span class="opt">— optional</span></label>
+        <input id="pCity" type="text" placeholder="Stockton, CA" autocomplete="off">
+      </div>
+    </div>
+    <button class="btn btn-hi" id="addBtn">Add project</button>
+  </div>
+
+  <div class="log">
+    <h2>Added this session</h2>
+    <div id="logList"><div class="empty">Nothing yet. Your first project shows up here.</div></div>
+  </div>
+
+  <div class="foot">Need to fix an older project? Those edits happen in the master sheet, not here.</div>
+</div>
+
+<div class="toast" id="toast"><span class="dot"></span><span id="toastMsg">Saved</span></div>
+
+<script>
+/* ==========================================================================
+   CONFIG  — edit these
+   ========================================================================== */
+
+// 1) Paste your n8n webhook URL here. While it's left as PASTE_WEBHOOK_URL_HERE,
+//    the app runs in TEST MODE (logs projects on screen but doesn't save them).
+const WEBHOOK_URL = "PASTE_WEBHOOK_URL_HERE";
+
+// 2) Your roster (27 people), sorted by last name, shown Last, First.
+//    Must match the Name list on the Setup tab of the workbook exactly.
+const NAMES = [
+  "Amarkhel, Nesar Ahmad","Bay, Majied","Booth, David","Calvillo, Enrique Jr.",
+  "Carter, Jerry","Cuppet, David","Galarneau, James","Gilbreath, Brent",
+  "Grijalva, Raymond","Haggard, Matt","Hernandez, Juan","Marlatt, James",
+  "Mateo, Omar Santiago","Midiere, Pat","Penfield, Scott","Rainwaters, Nathanial",
+  "Rawlinson, Ken","Roberts, Derrick","Salgado, Rene Mendoza","Schmierer, Todd",
+  "Swartz, Dylan","Tomlinson, Ryan","Vang, Pao","Vsetecka, Kirt",
+  "Walker, Everett","Yang, Mang","Yount, Donald"
+];
+
+const ROLES = ["PM","Superintendent","Project Engineer"];
+
+const COMPANIES = ["Haggerty Construction"];
+// add more pickable companies above, comma-separated in quotes.
+// Anyone can also choose "Other company…" and type their own.
+
+const VERTICALS = ["Industrial","Office / TI","Retail","Hospitality",
+  "Multi-Family","Senior Living","Healthcare","Auto"];
+
+const TYPES = ["Ground-up","Tenant Improvement"];
+
+/* ==========================================================================
+   APP  — no edits needed below
+   ========================================================================== */
+const TEST_MODE = WEBHOOK_URL === "PASTE_WEBHOOK_URL_HERE" || !WEBHOOK_URL;
+
+// safe storage: persists on a deployed site, silently no-ops where blocked
+const store = (()=>{ let ok=false;
+  try{const k="__hp";localStorage.setItem(k,"1");localStorage.removeItem(k);ok=true;}catch(e){}
+  return{
+    get(k){if(!ok)return null;try{return localStorage.getItem(k);}catch(e){return null;}},
+    set(k,v){if(!ok)return;try{localStorage.setItem(k,v);}catch(e){}},
+    del(k){if(!ok)return;try{localStorage.removeItem(k);}catch(e){}}
+  };
+})();
+
+const $ = id => document.getElementById(id);
+const fill = (sel, arr, ph) => {
+  const el = $(sel);
+  el.innerHTML = '<option value="">'+ph+'</option>' + arr.map(v=>`<option>${v}</option>`).join('');
+};
+fill('idName',NAMES,'Select your name');
+fill('idRole',ROLES,'Select role');
+fill('pVert',VERTICALS,'Select');
+fill('pType',TYPES,'Select');
+
+// Company: the listed companies plus a type-your-own option (used in two places)
+const OTHER = "Other company…";
+function buildCompany(el){
+  el.innerHTML = '<option value="">Select company</option>'
+    + COMPANIES.map(v=>`<option>${v}</option>`).join('')
+    + `<option value="${OTHER}">${OTHER}</option>`;
+}
+function toggleOther(sel, other){
+  if(sel.value === OTHER){ other.classList.remove('hidden'); other.focus(); }
+  else { other.classList.add('hidden'); other.value=''; }
+}
+buildCompany($('idCompany'));
+buildCompany($('coSelect'));
+$('idCompany').addEventListener('change', ()=> toggleOther($('idCompany'), $('idCompanyOther')));
+$('coSelect').addEventListener('change', ()=> toggleOther($('coSelect'), $('coOther')));
+
+let identity = null;
+let count = 0;
+const log = [];       // {id, project, vertical, status}  status: ok|pending|failed
+const pending = {};   // id -> payload, for retry
+
+const initials = n => n.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase() || '–';
+const num = v => { const n = parseFloat(String(v).replace(/[^0-9.\-]/g,'')); return isNaN(n)?null:n; };
+
+function showId(){ $('screenId').classList.remove('hidden'); $('screenAdd').classList.add('hidden'); }
+function showAdd(){
+  $('screenId').classList.add('hidden'); $('screenAdd').classList.remove('hidden');
+  $('whoInit').textContent = initials(identity.name);
+  $('whoName').textContent = identity.name;
+  $('whoMeta').textContent = identity.role;
+  $('coNow').textContent = identity.company;
+  if(TEST_MODE) $('connBanner').classList.remove('hidden');
+}
+
+// restore identity if we saved one on this device
+(function restore(){
+  const raw = store.get('identity');
+  if(raw){ try{ identity = JSON.parse(raw); }catch(e){ identity=null; } }
+  if(identity && identity.name){ showAdd(); } else { showId(); }
+})();
+
+function clearBad(scope){ scope.querySelectorAll('.field.bad').forEach(f=>f.classList.remove('bad')); }
+function markBad(id){ $(id).classList.add('bad'); }
+
+$('startBtn').onclick = ()=>{
+  const screen = $('screenId'); clearBad(screen);
+  const name=$('idName').value, role=$('idRole').value;
+  const compSel=$('idCompany').value;
+  const company = compSel === OTHER ? $('idCompanyOther').value.trim() : compSel;
+  let ok=true;
+  if(!name){markBad('f_name');ok=false}
+  if(!role){markBad('f_role');ok=false}
+  if(!company){markBad('f_company');ok=false}
+  if(!ok){ screen.querySelector('.field.bad').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  identity = {name,role,company};
+  store.set('identity', JSON.stringify(identity));
+  showAdd();
+};
+
+$('changeBtn').onclick = ()=>{
+  $('idName').value = identity.name; $('idRole').value = identity.role;
+  const other = $('idCompanyOther');
+  if(COMPANIES.includes(identity.company)){
+    $('idCompany').value = identity.company; other.classList.add('hidden'); other.value='';
+  } else {
+    $('idCompany').value = OTHER; other.classList.remove('hidden'); other.value = identity.company;
+  }
+  showId();
+};
+
+$('coSwitch').onclick = ()=>{
+  const panel = $('coPanel');
+  if(panel.classList.contains('hidden')){
+    const other = $('coOther');
+    if(COMPANIES.includes(identity.company)){
+      $('coSelect').value = identity.company; other.classList.add('hidden'); other.value='';
+    } else {
+      $('coSelect').value = OTHER; other.classList.remove('hidden'); other.value = identity.company;
+    }
+  }
+  panel.classList.toggle('hidden');
+};
+
+$('coUse').onclick = ()=>{
+  const sel = $('coSelect').value;
+  const company = sel === OTHER ? $('coOther').value.trim() : sel;
+  if(!company){ toast('Pick or type a company', false); if(sel===OTHER) $('coOther').focus(); return; }
+  identity.company = company;
+  store.set('identity', JSON.stringify(identity));
+  $('coNow').textContent = company;
+  $('coPanel').classList.add('hidden');
+  toast('Now logging under ' + company, true);
+};
+
+function toast(msg, good){
+  const t=$('toast'); $('toastMsg').textContent=msg;
+  t.classList.toggle('good',!!good); t.classList.add('show');
+  clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function renderLog(){
+  const wrap=$('logList');
+  if(!log.length){ wrap.innerHTML='<div class="empty">Nothing yet. Your first project shows up here.</div>'; return; }
+  wrap.innerHTML = log.map(it=>{
+    const cls = it.status==='ok'?'':it.status==='failed'?' failed':' pending';
+    const st = it.status==='ok'?'<span class="st ok">Saved</span>'
+             : it.status==='failed'?`<button class="retry" data-id="${it.id}">Retry</button>`
+             : '<span class="st pend">Saving…</span>';
+    return `<div class="item${cls}"><div class="txt"><b>${it.project}</b><span>${it.vertical}</span></div>${st}</div>`;
+  }).join('');
+  wrap.querySelectorAll('.retry').forEach(b=> b.onclick=()=>send(b.dataset.id));
+}
+
+async function post(payload){
+  if(TEST_MODE){ await new Promise(r=>setTimeout(r,450)); return true; }
+  const res = await fetch(WEBHOOK_URL,{
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+  });
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  return true;
+}
+
+async function send(id){
+  const item = log.find(l=>l.id===id); if(!item) return;
+  item.status='pending'; renderLog();
+  try{
+    await post(pending[id]);
+    item.status='ok'; delete pending[id]; renderLog();
+    toast(TEST_MODE?'Logged (test mode)':'Project saved', true);
+  }catch(e){
+    item.status='failed'; renderLog();
+    toast('Save failed — tap Retry', false);
+  }
+}
+
+$('addBtn').onclick = async ()=>{
+  const card = $('screenAdd'); clearBad(card);
+  const project=$('pName').value.trim();
+  const costRaw=$('pCost').value.trim(), sfRaw=$('pSf').value.trim();
+  const vert=$('pVert').value, type=$('pType').value, scope=$('pScope').value.trim();
+  const cost=num(costRaw), sf=num(sfRaw), year=num($('pYear').value);
+  let ok=true;
+  if(!project){markBad('p_name');ok=false}
+  if(cost===null){markBad('p_cost');ok=false}
+  if(sf===null){markBad('p_sf');ok=false}
+  if(!vert){markBad('p_vert');ok=false}
+  if(!type){markBad('p_type');ok=false}
+  if(!scope){markBad('p_scope');ok=false}
+  if(!ok){ card.querySelector('.field.bad').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+
+  const id = 'p'+Date.now()+Math.random().toString(36).slice(2,6);
+  const payload = {
+    name:identity.name, role:identity.role, company:identity.company,
+    project_name:project, cost:cost, square_footage:sf,
+    vertical:vert, project_type:type, architect:$('pArch').value.trim(),
+    scope:scope, year_completed:year, city_state:$('pCity').value.trim(),
+    added_at:new Date().toISOString()
+  };
+  pending[id] = payload;
+  log.unshift({id, project, vertical:vert, status:'pending'});
+  count++; $('count').textContent = count;
+  renderLog();
+
+  // clear project fields, keep identity + focus for the next one
+  ['pName','pCost','pSf','pScope','pArch','pYear','pCity'].forEach(k=>$(k).value='');
+  $('pVert').value=''; $('pType').value='';
+  $('pName').focus();
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  send(id);
+};
+</script>
+</body>
+</html>
