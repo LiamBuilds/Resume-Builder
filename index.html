@@ -274,7 +274,7 @@ select:focus,input:focus,textarea:focus{outline:3px solid var(--hi-soft);
 
 // 1) Paste your n8n webhook URL here. While it's left as PASTE_WEBHOOK_URL_HERE,
 //    the app runs in TEST MODE (logs projects on screen but doesn't save them).
-const WEBHOOK_URL = "PASTE_WEBHOOK_URL_HERE";
+const WEBHOOK_URL = https://haggertybuilds.app.n8n.cloud/webhook/portfolio-project
 
 // 2) Your roster (27 people), sorted by last name, shown Last, First.
 //    Must match the Name list on the Setup tab of the workbook exactly.
@@ -302,7 +302,7 @@ const TYPES = ["Ground-up","Tenant Improvement"];
 /* ==========================================================================
    APP  — no edits needed below
    ========================================================================== */
-const TEST_MODE = WEBHOOK_URL === "PASTE_WEBHOOK_URL_HERE" || !WEBHOOK_URL;
+const TEST_MODE = WEBHOOK_URL === "https://haggertybuilds.app.n8n.cloud/webhook/portfolio-project" || !WEBHOOK_URL;
 
 // safe storage: persists on a deployed site, silently no-ops where blocked
 const store = (()=>{ let ok=false;
