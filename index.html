@@ -277,6 +277,9 @@ select:focus,input:focus,textarea:focus{outline:3px solid var(--hi-soft);
 //    the app runs in TEST MODE (logs projects on screen but doesn't save them).
 const WEBHOOK_URL = "https://haggertybuilds.app.n8n.cloud/webhook/portfolio-project";
 
+// Shared secret sent with every submission. Must match the key checked in n8n.
+const SUBMIT_KEY = "67b2238ac5963a25ea2f1ff9ace818080aa309c4f05f4c69";
+
 // 2) Your roster (27 people), sorted by last name, shown Last, First.
 //    Must match the Name list on the Setup tab of the workbook exactly.
 const NAMES = [
@@ -442,7 +445,7 @@ function renderLog(){
 async function post(payload){
   if(TEST_MODE){ await new Promise(r=>setTimeout(r,450)); return true; }
   const res = await fetch(WEBHOOK_URL,{
-    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+    method:'POST', headers:{'Content-Type':'application/json','x-portfolio-key':SUBMIT_KEY}, body:JSON.stringify(payload)
   });
   if(!res.ok) throw new Error('HTTP '+res.status);
   return true;
@@ -475,6 +478,14 @@ $('addBtn').onclick = async ()=>{
   if(!type){markBad('p_type');ok=false}
   if(!scope){markBad('p_scope');ok=false}
   if(!ok){ card.querySelector('.field.bad').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+
+  // duplicate guard: warn if this project name already went in this session
+  const dupe = log.some(l => l.project.toLowerCase() === project.toLowerCase());
+  if(dupe && !confirm(`You already added "${project}" this session. Add it again?`)) return;
+
+  const btn = $('addBtn');
+  btn.disabled = true;
+  setTimeout(()=>{ btn.disabled = false; }, 600);
 
   const id = 'p'+Date.now()+Math.random().toString(36).slice(2,6);
   const payload = {
